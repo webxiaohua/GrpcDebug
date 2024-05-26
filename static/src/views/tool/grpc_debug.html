@@ -1,0 +1,103 @@
+
+<title>GrpcDebug</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>GrpcDebug</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    GrpcDebug
+                </div>
+                <div class="layui-card-body">
+                    <form class="layui-form" lay-filter="grpc_debug_form" action="">
+                        <div class="layui-row layui-col-space15">
+                            <div class="layui-col-sm7">
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-sm12">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">DiscoveryId</label>
+                                            <div class="layui-input-block">
+                                                <div id="discovery_id"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-sm12">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">环境列表</label>
+                                            <div class="layui-input-block" id="env_list">
+                                                <!--<input type="radio" name="ip_addr" value="1" title="默认">
+                                                <input type="radio" name="ip_addr" value="2" title="选中">-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-sm12">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">接口Path</label>
+                                            <div class="layui-input-block">
+                                                <div id="grpc_path"></div>
+                                                <!--<input type="text" name="grpc_path" placeholder="请输入接口Path" autocomplete="off" class="layui-input" lay-verify="required" value="/live.live.activityplay.v1.WarriorBreakBackend/WarriorList" />-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-sm12">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">接口参数</label>
+                                            <div class="layui-input-block">
+                                                <textarea id="grpc_params" lay-filter="grpc_params" name="grpc_params" placeholder="请输入接口参数" class="layui-textarea" lay-verify="required"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-sm12">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label"></label>
+                                            <div class="layui-input-block">
+                                                <button type="button" lay-submit lay-filter="btn_run" class="layui-btn">运行</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-sm5">
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-sm12">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">调用结果</label>
+                                            <div class="layui-input-block">
+                                                <!--<button type="button" class="layui-btn layui-btn-sm layui-btn-primary" id="btn_copy" style="margin-top:5px;">
+                                                    <i class="layui-icon layui-icon-star"></i>复制
+                                                </button>-->
+                                                <textarea id="grpc_resp_source" class="layui-textarea"></textarea>
+                                                <br/>
+                                                <input type="text" id="grpc_debug_path" name="grpc_debug_path" placeholder="grpcDebug 命令" autocomplete="off" class="layui-input" />
+                                                <br/>
+                                                <div id="grpc_resp" style="padding: 5px; cursor:pointer; overflow-x:scroll;"></div>
+                                                <!--<textarea id="grpc_resp" name="grpc_resp" placeholder="调用结果" class="layui-textarea"></textarea>-->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use('grpc_debug', layui.factory('grpc_debug'));
+    layui.use('form', function(){
+        var form = layui.form;
+        form.render()
+    });
+</script>

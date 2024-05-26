@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="layui/css/layui.css" medis="all" />
+    <!--<script type="text/javascript" src="//tool.live.bilibili.co/message-listener/lib/bilibili/danmaku-websocket.min.js"></script>-->
+    <script>
+        /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+    </script>
+</head>
+<body>
+    <div id="LAY_app"></div>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script>
+        var version = '20240526001'
+        layui.config({
+            base:'../src/' // 外部扩展
+            ,version: version
+        }).use('index');
+    </script>
+</body>
+</html>
