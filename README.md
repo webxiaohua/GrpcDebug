@@ -7,10 +7,13 @@ A grpc debugging tool with web ui
 # step1 创建db
 cd sql
 sqlite3 grpc_debug.db
+
 # step2 启动程序
 go mod download
 cd cmd
 go build -o ../main
+cd ..
+./main
 ```
 
 # 目录介绍
