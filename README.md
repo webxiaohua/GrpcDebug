@@ -1,5 +1,6 @@
 # GrpcDebug
 A grpc debugging tool with web ui
+![grpc_debug](static/img/grpc_debug.jpg)
 
 # 本地启动
 ```bash
