@@ -17,6 +17,7 @@ cd ..
 ```
 
 # 目录介绍
+```bash
 /cmd    启动目录
 /internal   内部实现
     -/dao   数据操作
@@ -26,6 +27,7 @@ cd ..
 /proto  存放grpc协议定义文件
 /sql 数据库文件存放目录
 /static 静态资源文件
+```
 
 # 常用命令
 ```bash
