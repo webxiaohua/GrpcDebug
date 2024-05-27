@@ -19,7 +19,8 @@ import (
 )
 
 func main() {
-	httpServer := server.New()
+	httpServer := server.NewHttpServer()
+	grpcServer := server.NewGrpcServer()
 	// 使用 WaitGroup 来等待所有请求处理完成
 	var wg sync.WaitGroup
 	// 启动 HTTP 服务器的 goroutine
@@ -44,7 +45,10 @@ func main() {
 
 	// 停止 HTTP 服务器，并等待所有请求处理完成
 	if err := httpServer.Shutdown(ctx); err != nil {
-		fmt.Printf("Error during server shutdown: %v\n", err)
+		fmt.Printf("Error during http server shutdown: %v\n", err)
+	}
+	if err := grpcServer.Stop; err != nil {
+		fmt.Printf("Error during grpc server shutdown: %v\n", err)
 	}
 	// 等待所有请求处理完成
 	wg.Wait()

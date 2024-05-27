@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "./;pb";
+package pb;
+
+// 定义服务
+service Greeter {
+  // 定义服务方法
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+
+// 定义请求消息
+message HelloRequest {
+  string name = 1;
+  repeated int64 ids = 2;
+
+}
+
+message Book {
+  int64 id = 1;
+  string name = 2;
+}
+
+// 定义响应消息
+message HelloReply {
+  string message = 1;
+  repeated Book book_list = 2;
+}

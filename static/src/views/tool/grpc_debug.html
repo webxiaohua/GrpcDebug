@@ -22,7 +22,7 @@
                                 <div class="layui-row layui-col-space15">
                                     <div class="layui-col-sm12">
                                         <div class="layui-form-item layui-form-text">
-                                            <label class="layui-form-label">DiscoveryId</label>
+                                            <label class="layui-form-label">服务发现ID</label>
                                             <div class="layui-input-block">
                                                 <div id="discovery_id"></div>
                                             </div>
@@ -30,10 +30,19 @@
                                     </div>
                                     <div class="layui-col-sm12">
                                         <div class="layui-form-item layui-form-text">
-                                            <label class="layui-form-label">环境列表</label>
-                                            <div class="layui-input-block" id="env_list">
+                                            <label class="layui-form-label">实例列表</label>
+                                            <div class="layui-input-block">
+                                                <div id="node_list"></div>
                                                 <!--<input type="radio" name="ip_addr" value="1" title="默认">
                                                 <input type="radio" name="ip_addr" value="2" title="选中">-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-sm12">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">当前实例</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="ip_addr_val" lay-verify="required" placeholder="请输入实例ip:port" autocomplete="off" class="layui-input">
                                             </div>
                                         </div>
                                     </div>

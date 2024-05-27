@@ -19,9 +19,9 @@ layui.define(['form'],function(exports){
     var envIsLoading = false;
 
     // 处理env控件
-    function handleEnv(discoveryId){
+    function handleNodeList(discoveryId){
         $.ajax({
-            url:"/tool/grpc_debug/env",
+            url:"/tool/grpc_debug/node_list",
             method:"POST",
             dataType:"json",
             contentType:"application/json",
@@ -31,25 +31,25 @@ layui.define(['form'],function(exports){
             success:function (res) {
                 if (res.code != 0) {
                     layer.msg(res.message);
-                    $("#env_list").empty()
+                    $("#node_list").empty()
                 }else{
-                    if(res.data.path_user_params_list.length === 0) {
+                    if(res.data.path_list.length === 0) {
                         pathList.length = 0;
                     }else {
                         pathList.length = 0;
-                        for (const v of res.data.path_user_params_list) {
-                            pathStr = v.path + " - 【"+v.username+"】";
+                        for (const v of res.data.path_list) {
+                            pathStr = v.path;
                             pathList.push({value: pathStr, name: pathStr});
                             pathUserParamsMap[pathStr]=v.params;
                         }
                     }
                     initGrpcPath();
-                    $("#env_list").empty()
-                    for (let i in res.data.env_list) {
+                    $("#node_list").empty()
+                    for (let i in res.data.node_list) {
                         if (i == 0) {
-                            $("#env_list").append("<input type=\"radio\" name=\"ip_addr\" value=\"" + res.data.env_list[i][1] + "\" title=\"" + res.data.env_list[i][0] + "\" lay-verify=\"required\" checked>");
+                            $("#node_list").append("<input type=\"radio\" name=\"ip_addr\" value=\"" + res.data.node_list[i][1] + "\" title=\"" + res.data.node_list[i][0] + "\" lay-verify=\"required\" checked>");
                         } else {
-                            $("#env_list").append("<input type=\"radio\" name=\"ip_addr\" value=\"" + res.data.env_list[i][1] + "\" title=\"" + res.data.env_list[i][0] + "\" lay-verify=\"required\">");
+                            $("#node_list").append("<input type=\"radio\" name=\"ip_addr\" value=\"" + res.data.node_list[i][1] + "\" title=\"" + res.data.node_list[i][0] + "\" lay-verify=\"required\">");
                         }
                     }
                 }
@@ -67,7 +67,7 @@ layui.define(['form'],function(exports){
                 elem: '#discovery_id',
                 name: 'discovery_id', // 渲染的input的name值
                 layFilter: 'select_discovery_id', //同layui form参数lay-filter
-                layVerify: 'required', //同layui form参数lay-verify
+                layVerify: '', //同layui form参数lay-verify
                 layVerType: 'tips', // 同layui form参数lay-verType
                 layReqText: '请填写discovery_id', //同layui form参数lay-ReqText
                 initValue: '', // 渲染初始化默认值
@@ -95,7 +95,7 @@ layui.define(['form'],function(exports){
 
             // 监听select 选择事件
             ins.on('itemSelect(discovery_id)', function (obj) {
-                handleEnv(obj.data);
+                handleNodeList(obj.data);
             });
             $("#discovery_id").keydown(function (e){
                 if(e.keyCode == 13) {
@@ -105,7 +105,7 @@ layui.define(['form'],function(exports){
             })
             $("#discovery_id").keyup(function (e){
                 if(e.keyCode == 13) {
-                    handleEnv(ins.getComponents().$inputElem.val());
+                    handleNodeList(ins.getComponents().$inputElem.val());
                 }
             })
             // 监听blur 光标离开事件
@@ -156,7 +156,7 @@ layui.define(['form'],function(exports){
     // 初始化 discovery_id 控件
     $(function(){
         $.ajax({
-            url:"/tool/grpc_debug/discovery",
+            url:"/tool/grpc_debug/discovery_list",
             method:"POST",
             dataType:"json",
             contentType:"application/json",
@@ -174,16 +174,6 @@ layui.define(['form'],function(exports){
             }
         });
     });
-    function getCookie(cname){
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++)
-        {
-            var c = ca[i].trim();
-            if (c.indexOf(name)==0) return c.substring(name.length,c.length);
-        }
-        return "";
-    }
     // 提交
     form.on('submit(btn_run)',function (data) {
         console.log(data)
@@ -203,10 +193,9 @@ layui.define(['form'],function(exports){
             },
             data:JSON.stringify({
                 discovery_id:data.field.discovery_id,
-                ip_addr:data.field.ip_addr,
+                ip_addr:data.field.ip_addr_val,
                 grpc_path:grpcPath,
-                grpc_params:data.field.grpc_params,
-                username:getCookie("username")
+                grpc_params:data.field.grpc_params
             }),
             success:function (res) {
                 btn.text("运行").attr("disabled",false).removeClass("layui-disabled");
@@ -214,13 +203,13 @@ layui.define(['form'],function(exports){
                     layer.msg(res.message);
                     $("#grpc_resp").text(res.message);
                     $("#grpc_resp_source").val(res.message);
-                    $("#grpc_debug_path").val("grpcDebug -addr="+data.field.ip_addr+" -data='"+data.field.grpc_params+"' -method="+data.field.grpc_path);
+                    $("#grpc_debug_path").val("grpcDebug -addr="+data.field.ip_addr_val+" -data='"+data.field.grpc_params+"' -method="+data.field.grpc_path);
                 }else{
                     $("#grpc_resp").JSONView(res.data);
                     //const jsonObj = JSON.parse(res.data);
                     //$("#grpc_resp_source").val(JSON.stringify(jsonObj,null,2));
-                    $("#grpc_resp_source").val(res.data);
-                    $("#grpc_debug_path").val("grpcDebug -addr="+data.field.ip_addr+" -data='"+data.field.grpc_params+"' -method="+data.field.grpc_path);
+                    $("#grpc_resp_source").val(JSON.stringify(res.data,null,2));
+                    $("#grpc_debug_path").val("grpcDebug -addr="+data.field.ip_addr_val+" -data='"+data.field.grpc_params+"' -method="+data.field.grpc_path);
                 }
             }
         });
