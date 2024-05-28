@@ -68,6 +68,32 @@ func GrpcDebug(ctx context.Context, req *GrpcDebugReq) (*GrpcDebugResp, error) {
 		Message: "",
 		Data:    nil,
 	}
+
+	if req.IPAddr == "" || req.GrpcPath == "" || req.GrpcParams == "" {
+		resp.Code = 400
+		resp.Message = "参数错误"
+		return resp, nil
+	}
+	reply, err := GrpcInvoke(ctx, req.IPAddr, req.GrpcPath, req.GrpcParams)
+	if err != nil {
+		return &GrpcDebugResp{
+			Code:    500,
+			Message: err.Error(),
+		}, err
+	}
+	return &GrpcDebugResp{
+		Code:    0,
+		Message: "",
+		Data:    reply,
+	}, nil
+}
+
+/*func GrpcDebug(ctx context.Context, req *GrpcDebugReq) (*GrpcDebugResp, error) {
+	resp := &GrpcDebugResp{
+		Code:    0,
+		Message: "",
+		Data:    nil,
+	}
 	opts := []grpc.DialOption{
 		grpc.WithDefaultCallOptions(grpc.CallContentSubtype(JSONCodec{}.Name())),
 		grpc.WithInsecure(),
@@ -130,4 +156,40 @@ func GrpcDebug(ctx context.Context, req *GrpcDebugReq) (*GrpcDebugResp, error) {
 		Message: "",
 		Data:    reply,
 	}, nil
+}*/
+
+func GrpcInvoke(ctx context.Context, addr, path, params string) (resp interface{}, err error) {
+	opts := []grpc.DialOption{
+		grpc.WithDefaultCallOptions(grpc.CallContentSubtype(JSONCodec{}.Name())),
+		grpc.WithInsecure(),
+	}
+	conn, dailErr := grpc.Dial(addr, opts...)
+	if dailErr != nil {
+		err = dailErr
+		return
+	}
+	defer conn.Close()
+	if headers != nil {
+		md := gmd.MD{}
+		for _, header := range headers {
+			pairs := strings.Split(header, ":")
+			if len(pairs) != 2 {
+				err = fmt.Errorf("invalid header")
+			} else {
+				md[strings.TrimSpace(pairs[0])] = append(md[strings.TrimSpace(pairs[0])], strings.TrimSpace(pairs[1]))
+			}
+		}
+		ctx = gmd.NewOutgoingContext(ctx, md)
+	}
+	// Assuming req.GrpcParams is a JSON string that matches the request type
+	var grpcReq interface{}
+	err = json.Unmarshal([]byte(params), &grpcReq)
+	if err != nil {
+		return
+	}
+	err = conn.Invoke(ctx, path, grpcReq, &resp)
+	if err != nil {
+		return
+	}
+	return
 }

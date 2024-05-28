@@ -203,13 +203,13 @@ layui.define(['form'],function(exports){
                     layer.msg(res.message);
                     $("#grpc_resp").text(res.message);
                     $("#grpc_resp_source").val(res.message);
-                    $("#grpc_debug_path").val("grpcDebug -addr="+data.field.ip_addr_val+" -data='"+data.field.grpc_params+"' -method="+data.field.grpc_path);
+                    $("#grpc_debug_path").val("grpcDebug --addr="+data.field.ip_addr_val+" --data='"+data.field.grpc_params+"' --path="+data.field.grpc_path);
                 }else{
                     $("#grpc_resp").JSONView(res.data);
                     //const jsonObj = JSON.parse(res.data);
                     //$("#grpc_resp_source").val(JSON.stringify(jsonObj,null,2));
                     $("#grpc_resp_source").val(JSON.stringify(res.data,null,2));
-                    $("#grpc_debug_path").val("grpcDebug -addr="+data.field.ip_addr_val+" -data='"+data.field.grpc_params+"' -method="+data.field.grpc_path);
+                    $("#grpc_debug_path").val("grpcDebug --addr="+data.field.ip_addr_val+" --data='"+data.field.grpc_params+"' --path="+data.field.grpc_path);
                 }
             }
         });
